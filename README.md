@@ -12,6 +12,7 @@
 - [02. Web Basics & JavaScript](#-02-web-basics--javascript)
 - [03. React & Next.js](#-03-react--nextjs)
 - [04. UI Projects](#-04-ui-projects)
+- [05. Java](#-05-java)
 
 ---
 
@@ -64,3 +65,19 @@
 | 프로젝트명 | 문서 링크 | 기간 | 설명 |
 | :--- | :--- | :--- | :--- |
 | **컬쳐맵 (Culture Map)** | [culture-map.md](./04_ui-projects/culture-map.md) | 26.09.29 ~ 26.10.01 | 영화, 공연, 축제, 전시 등 다양한 문화 행사 정보를 날짜/지역별로 통합 탐색하고 지도에서 위치를 확인하는 서비스 |
+
+---
+
+## ☕ 05. Java
+
+| 날짜 | 파일명 | 핵심 학습 내용 |
+| :--- | :--- | :--- |
+| `26.10.06` | [261006-java-basic.md](./05_java/261006-java-basic.md) | 리터럴·변수·상수, 오버플로우, 형변환, 연산자, 메소드 호출 구조, 패키지와 임포트 |
+| `26.10.07` | [261007-scanner-looping-array.md](./05_java/261007-scanner-looping-array.md) | `Scanner` 콘솔 입력, 조건문·반복문·분기문, 1차원/다차원 배열, 배열 복사 |
+| `26.10.08` | [261008-sort-oop-basic.md](./05_java/261008-sort-oop-basic.md) | 배열 정렬 알고리즘, 사용자 정의 타입, 캡슐화, DTO 패턴, 생성자와 `this` |
+| `26.10.12` | [261012-overloading-singleton.md](./05_java/261012-overloading-singleton.md) | 변수의 종류, 메소드 오버로딩, `static`/`final` 키워드, 싱글톤 패턴 |
+| `26.10.13` | [261013-inherit-overriding.md](./05_java/261013-inherit-overriding.md) | 상속과 `super`, 메소드 오버라이딩, 다형성, 추상 클래스 |
+| `26.10.14` | [261014-abstract-interface-api.md](./05_java/261014-abstract-interface-api.md) | 추상 클래스·인터페이스, `Object`(`toString`/`equals`/`hashCode`), `String`, `StringBuilder`, Wrapper, `java.time` |
+| `26.10.15` | [261015-collection-list-set.md](./05_java/261015-collection-list-set.md) | 컬렉션 프레임워크, `ArrayList`/`LinkedList`, `Comparable`/`Comparator`, `ArrayDeque`, 와일드카드, `Set` |
+| `26.10.16` | [261016-exception-io-enum.md](./05_java/261016-exception-io-enum.md) | 예외처리와 사용자 정의 예외, `File`, 바이트/문자/보조 스트림, `Properties`, `enum` |
+| `26.10.19` | [261019-lambda-stream.md](./05_java/261019-lambda-stream.md) | 람다식, 함수형 인터페이스(`Consumer`/`Supplier`/`Function`/`Predicate`), 메소드 참조, Stream API, `Optional`, `groupingBy` |
