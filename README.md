@@ -13,6 +13,7 @@
 - [03. React & Next.js](#-03-react--nextjs)
 - [04. UI Projects](#-04-ui-projects)
 - [05. Java](#-05-java)
+- [06. Database](#-06-database)
 
 ---
 
@@ -81,3 +82,11 @@
 | `26.10.15` | [261015-collection-list-set.md](./05_java/261015-collection-list-set.md) | 컬렉션 프레임워크, `ArrayList`/`LinkedList`, `Comparable`/`Comparator`, `ArrayDeque`, 와일드카드, `Set` |
 | `26.10.16` | [261016-exception-io-enum.md](./05_java/261016-exception-io-enum.md) | 예외처리와 사용자 정의 예외, `File`, 바이트/문자/보조 스트림, `Properties`, `enum` |
 | `26.10.19` | [261019-lambda-stream.md](./05_java/261019-lambda-stream.md) | 람다식, 함수형 인터페이스(`Consumer`/`Supplier`/`Function`/`Predicate`), 메소드 참조, Stream API, `Optional`, `groupingBy` |
+
+---
+
+## 🗄️ 06. Database
+
+| 날짜 | 파일명 | 핵심 학습 내용 |
+| :--- | :--- | :--- |
+| `26.10.20` | [261020-sql-select-basic.md](./06_database/261020-sql-select-basic.md) | `SELECT`, `ORDER BY`(`FIELD`·NULL 정렬), `WHERE` 연산자, `DISTINCT`, `LIMIT`, JOIN(INNER/LEFT/SELF), `GROUP BY`·`HAVING`·`ROLLUP`, 서브쿼리, 집합 연산자 |
