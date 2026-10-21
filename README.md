@@ -90,3 +90,4 @@
 | 날짜 | 파일명 | 핵심 학습 내용 |
 | :--- | :--- | :--- |
 | `26.10.20` | [261020-sql-select-basic.md](./06_database/261020-sql-select-basic.md) | `SELECT`, `ORDER BY`(`FIELD`·NULL 정렬), `WHERE` 연산자, `DISTINCT`, `LIMIT`, JOIN(INNER/LEFT/SELF), `GROUP BY`·`HAVING`·`ROLLUP`, 서브쿼리, 집합 연산자 |
+| `26.10.21` | [261021-dml-ddl-constraints.md](./06_database/261021-dml-ddl-constraints.md) | DML(`INSERT`/`UPDATE`/`DELETE`/`REPLACE`), DDL(`CREATE`/`ALTER`/`DROP`/`TRUNCATE`), `AUTO_INCREMENT`, 제약조건(PK/FK/`UNIQUE`/`CHECK`/`DEFAULT`), `CAST`/`CONVERT` 형변환 |
