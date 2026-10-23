@@ -1,4 +1,4 @@
-# JavaScript
+# JavaScript 옵셔널 체이닝 · 생성자 함수 · 프로토타입 정리 (TIL)
 
 ## TIL(Today I Learned)
 

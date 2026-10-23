@@ -1,4 +1,4 @@
-# JavaScript
+# JavaScript 객체 · 조건문 · 반복문 정리 (TIL)
 
 ## TIL(Today I Learned)
 * 객체(Object)의 개념과 키-값(key-value) 쌍으로 구성된 프로퍼티 및 메서드 작성법을 학습

@@ -1,4 +1,4 @@
-# Java 핵심 기술 정리 (TIL)
+# Java 배열 정렬 · 객체지향 기초 정리 (TIL)
 
 ## 1. 배열 정렬 알고리즘 (Sorting Algorithms)
 

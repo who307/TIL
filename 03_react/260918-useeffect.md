@@ -1,4 +1,4 @@
-# React
+# React 리스트 렌더링 · useEffect 정리 (TIL)
 
 ## TIL(Today I Learned)
 

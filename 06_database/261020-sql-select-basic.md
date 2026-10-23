@@ -378,7 +378,9 @@ WHERE a.category_code = 10
 
 ---
 
-## 📝 정리: SELECT 문 작성 순서
+## 📝 오늘의 정리
+
+### SELECT 문 작성 순서
 
 ```sql
 SELECT    컬럼, 집계함수
@@ -389,3 +391,15 @@ HAVING    그룹 조건
 ORDER BY  정렬 기준
 LIMIT     개수;
 ```
+
+1. `SELECT`는 작성 순서와 실제 실행 순서(`FROM` → `WHERE` → `GROUP BY` → `HAVING` → `SELECT` → `ORDER BY` → `LIMIT`)가 다르다.
+2. `WHERE`는 **행**을 거르고, `HAVING`은 `GROUP BY`로 묶인 **그룹**을 거른다.
+3. `INNER JOIN`은 양쪽에 모두 있는 행만, `LEFT JOIN`은 왼쪽 테이블의 행을 모두 남긴다.
+4. 서브쿼리와 집합 연산자(`UNION` 등)로 여러 조회 결과를 조합할 수 있다.
+
+---
+
+## 느낀 점
+
+* SQL 작성 순서와 실행 순서가 다르다는 것을 알고 나니, `SELECT`에서 지은 별칭을 `WHERE`에서 쓸 수 없는 이유가 이해됨.
+* JOIN 종류에 따라 결과 행 수가 달라지는 것을 직접 확인하면서, 어떤 테이블을 기준으로 할지 먼저 정해야 한다고 느낌.

@@ -1,4 +1,4 @@
-# Java 핵심 기술 정리 (TIL)
+# Java Scanner · 제어문 · 배열 정리 (TIL)
 
 ## 1. 콘솔 입력 처리 (Scanner)
 

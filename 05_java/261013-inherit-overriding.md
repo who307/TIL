@@ -1,4 +1,4 @@
-# Java 객체지향 프로그래밍 핵심 정리 (TIL)
+# Java 상속 · 오버라이딩 · 다형성 정리 (TIL)
 
 ## 1. 상속 (Inheritance)과 `super` 키워드
 

@@ -1,4 +1,4 @@
-# Java 핵심 기술 정리 (TIL)
+# Java 변수 종류 · 오버로딩 · static/final · 싱글톤 정리 (TIL)
 
 ## 1. 변수의 종류 (Kinds of Variables)
 

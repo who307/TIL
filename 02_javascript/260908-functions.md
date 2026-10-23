@@ -1,4 +1,4 @@
-# JavaScript
+# JavaScript 함수 · 호이스팅 · 콜백 정리 (TIL)
 
 ## TIL(Today I Learned)
 * 함수 선언문과 함수 표현식의 구조 및 호이스팅(Hoisting) 동작 방식 차이를 학습
