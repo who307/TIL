@@ -2,7 +2,7 @@
 
 > 실습 환경: MySQL (`menudb`), Gradle 프로젝트, `mysql-connector-j` 드라이버
 
-## 0. JDBC란?
+## 1. JDBC란?
 
 * **JDBC (Java DataBase Connectivity)**: 자바 애플리케이션에서 DB에 접속해 SQL을 실행할 수 있게 해주는 **표준 API** (`java.sql` 패키지).
 * 자바는 **인터페이스**(`Connection`, `Statement`, `ResultSet` 등)만 정의하고, 실제 구현체는 각 DB 벤더가 제공하는 **JDBC 드라이버**가 담당함.
@@ -17,7 +17,7 @@
 
 ---
 
-## 1. 프로젝트 설정 (Gradle)
+## 2. 프로젝트 설정 (Gradle)
 
 * `build.gradle`의 `dependencies`에 MySQL 드라이버를 추가함. ([mvnrepository](https://mvnrepository.com/artifact/com.mysql/mysql-connector-j)에서 검색)
 
@@ -30,7 +30,7 @@ dependencies {
 
 ---
 
-## 2. Connection 직접 생성
+## 3. Connection 직접 생성
 
 * **흐름**: ① 드라이버 클래스 로딩 → ② `DriverManager.getConnection(url, user, password)` → ③ 사용 후 `close()`
 * `Class.forName()`은 `ClassNotFoundException`, `getConnection()`은 `SQLException`을 던지므로 예외 처리가 필요함.
@@ -68,7 +68,7 @@ try {
 
 ---
 
-## 3. 접속 정보 분리 + JDBCTemplate
+## 4. 접속 정보 분리 + JDBCTemplate
 
 ### properties 파일로 접속 정보 분리
 
@@ -141,7 +141,7 @@ public class Application {
 
 ---
 
-## 4. Statement로 SELECT 실행
+## 5. Statement로 SELECT 실행
 
 * `con.createStatement()`로 `Statement`를 만들고, `executeQuery(sql)`로 `SELECT`를 실행하면 `ResultSet`이 반환됨.
 * `ResultSet`은 커서 방식으로 동작함. `next()`가 다음 행으로 이동하면서 행이 있으면 `true`를 반환하므로 `while`로 순회함.
@@ -184,3 +184,10 @@ try {
 3. 접속 정보는 **properties 파일로 분리**하고, 연결 생성/해제는 **JDBCTemplate**으로 재사용한다.
 4. `ResultSet`은 `next()`로 한 행씩 이동하며 컬럼 타입에 맞는 getter로 값을 꺼낸다.
 5. DB 자원은 **생성의 역순으로 반드시 close** 한다.
+
+---
+
+## 느낀 점
+
+* SQL로만 다루던 DB를 자바 코드에서 직접 연결하고 조회해보니, 지금까지 배운 Java와 SQL이 하나로 이어지는 느낌이 들었음.
+* 접속 정보를 properties로 분리하는 이유가 코드 수정 편의뿐 아니라 비밀번호 같은 민감 정보를 저장소에 올리지 않기 위해서라는 점을 실감함.

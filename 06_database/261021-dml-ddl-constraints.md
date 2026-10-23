@@ -2,7 +2,7 @@
 
 > 실습 환경: MySQL (`menudb`), `tbl_menu` 컬럼 순서는 `menu_code`, `menu_name`, `menu_price`, `category_code`, `orderable_status`
 
-## 0. SQL 명령어 분류
+## 1. SQL 명령어 분류
 
 | 분류 | 의미 | 명령어 |
 | :--- | :--- | :--- |
@@ -12,7 +12,7 @@
 
 ---
 
-## 1. DML
+## 2. DML
 
 ### INSERT
 
@@ -81,7 +81,7 @@ REPLACE INTO tbl_menu VALUES (17, '참기름', 5000, 10, 'Y');
 
 ---
 
-## 2. DDL
+## 3. DDL
 
 ### CREATE TABLE
 
@@ -160,7 +160,7 @@ INSERT INTO tb4 VALUES (NULL, 10, 'Y'), (NULL, 20, 'N');   -- 다시 pk 1, 2
 
 ---
 
-## 3. 제약조건 (Constraints)
+## 4. 제약조건 (Constraints)
 
 * **개념**: 테이블에 저장될 데이터에 규칙을 걸어 **잘못된 값이 들어오지 못하게** 막음. 위반하면 `INSERT`/`UPDATE`가 에러로 거부됨.
 
@@ -313,7 +313,7 @@ INSERT INTO tbl_country (country_name) VALUES ('미국');             -- 미국,
 
 ---
 
-## 4. 형변환 (CAST / CONVERT)
+## 5. 형변환 (CAST / CONVERT)
 
 ### 명시적 형변환
 
@@ -345,3 +345,20 @@ SELECT 3 > 'MAY';   -- 1   : 숫자로 바꿀 수 없는 'MAY'는 0으로 취급
 ```
 
 > 암시적 형변환은 의도치 않은 결과를 낼 수 있으므로, 타입이 다른 값은 `CAST`로 명시적으로 바꿔 쓰는 편이 안전함.
+
+---
+
+## 📝 오늘의 정리
+
+1. SQL은 조회(DQL), 데이터 조작(DML), 구조 정의(DDL)로 나뉜다.
+2. `UPDATE`·`DELETE`는 실행 전에 같은 `WHERE`로 `SELECT` 해서 대상을 먼저 확인한다.
+3. `DELETE`는 행을 지우고, `TRUNCATE`는 테이블을 초기화하며(`AUTO_INCREMENT`도 리셋), `DROP`은 테이블 자체를 삭제한다.
+4. 제약조건(`NOT NULL`·`UNIQUE`·`PRIMARY KEY`·`FOREIGN KEY`·`CHECK`·`DEFAULT`)으로 잘못된 데이터가 들어오는 것을 DB 단에서 막는다.
+5. 타입이 다른 값은 암시적 형변환에 맡기지 말고 `CAST`/`CONVERT`로 명시적으로 바꾼다.
+
+---
+
+## 느낀 점
+
+* `WHERE` 없이 `UPDATE`·`DELETE`를 실행하면 전체 행이 바뀐다는 점이 가장 무섭게 느껴졌고, 먼저 `SELECT`로 확인하는 습관을 들여야겠다고 생각함.
+* 제약조건을 걸어두면 애플리케이션 코드에서 실수해도 DB가 한 번 더 막아준다는 점에서 테이블 설계 단계가 중요하다고 느낌.

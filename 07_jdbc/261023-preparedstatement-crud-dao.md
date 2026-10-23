@@ -2,7 +2,7 @@
 
 > 실습 환경: MySQL (`menudb`의 `TBL_MENU`·`TBL_CATEGORY`, `employeedb`의 `EMPLOYEE`), Gradle 프로젝트
 
-## 0. 오늘의 흐름
+## 1. 오늘의 흐름
 
 | 단계 | 내용 |
 | :--- | :--- |
@@ -12,7 +12,7 @@
 
 ---
 
-## 1. JDBCTemplate에 close 오버로딩 추가
+## 2. JDBCTemplate에 close 오버로딩 추가
 
 * `Connection`뿐 아니라 `Statement`, `ResultSet`도 DB 자원이므로 닫아야 함.
 * 같은 이름 `close()`를 매개변수 타입만 다르게 **오버로딩**함. `PreparedStatement`는 `Statement`의 자식이라 `close(Statement)` 하나로 같이 처리됨.
@@ -39,7 +39,7 @@ public static void close(ResultSet rset) {
 
 ---
 
-## 2. Statement vs PreparedStatement
+## 3. Statement vs PreparedStatement
 
 ### Statement: 문자열 이어붙이기
 
@@ -95,7 +95,7 @@ while (rset.next()) {
 
 ---
 
-## 3. 쿼리를 XML 파일로 분리
+## 4. 쿼리를 XML 파일로 분리
 
 * SQL을 자바 코드에서 분리해 XML에 `key`로 저장하고, `Properties.loadFromXML()`로 읽어옴.
 * 쿼리를 바꿀 때 자바 코드를 건드리지 않아도 됨.
@@ -126,7 +126,7 @@ try (FileInputStream queryStream = new FileInputStream("src/main/java/com/who307
 
 ---
 
-## 4. SQL Injection
+## 5. SQL Injection
 
 * 입력값에 SQL 구문을 끼워 넣어 **쿼리의 의미 자체를 바꿔버리는 공격**.
 
@@ -165,7 +165,7 @@ pstmt.setString(2, empName);
 
 ---
 
-## 5. CRUD: executeUpdate()
+## 6. CRUD: executeUpdate()
 
 * `INSERT` / `UPDATE` / `DELETE`(DML)는 `executeUpdate()`로 실행함.
 * 반환값은 **영향받은 행(row)의 개수(`int`)**. `result > 0`이면 성공으로 판단함.
@@ -226,7 +226,7 @@ pstmt.setInt(1, deleteMenu.getCode());
 
 ---
 
-## 6. DAO (Data Access Object)
+## 7. DAO (Data Access Object)
 
 ### 문제: 모든 코드가 main에 몰려 있음
 
@@ -342,3 +342,10 @@ close(con);
 3. SQL은 **XML 파일로 분리**하고 `Properties.loadFromXML()`로 key를 통해 꺼내 쓴다.
 4. `SELECT`는 `executeQuery()`(`ResultSet`), DML은 `executeUpdate()`(영향받은 행 수)로 실행한다.
 5. DB 접근 코드는 **DAO**로 분리하고, `Connection`은 호출하는 쪽에서 만들어 넘기고 닫는다.
+
+---
+
+## 느낀 점
+
+* 같은 입력값으로 Statement와 PreparedStatement를 비교해보니 SQL Injection이 얼마나 쉽게 일어나는지 체감했고, 사용자 입력이 들어가는 쿼리는 무조건 PreparedStatement를 써야겠다고 느낌.
+* `main` 하나에 모든 코드를 넣었을 때보다 DAO로 나누니 각 클래스의 역할이 분명해졌고, 다른 기능을 추가할 때도 DAO 메소드만 늘리면 된다는 점이 좋았음.

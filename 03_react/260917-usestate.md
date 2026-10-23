@@ -1,4 +1,4 @@
-# React
+# React useState · 상태 관리 정리 (TIL)
 
 ## TIL(Today I Learned)
 

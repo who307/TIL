@@ -1,4 +1,4 @@
-# Next.js & React 핵심 기술 정리 (TIL)
+# Next.js 메타데이터 · Provider 정리 (TIL)
 
 ## 1. Next.js (App Router) 주요 기술
 
