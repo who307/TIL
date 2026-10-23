@@ -100,3 +100,4 @@
 | 날짜 | 파일명 | 핵심 학습 내용 |
 | :--- | :--- | :--- |
 | `26.10.22` | [261022-jdbc-connection-statement.md](./07_jdbc/261022-jdbc-connection-statement.md) | JDBC 구조, `DriverManager`로 `Connection` 생성, properties 접속 정보 분리, `JDBCTemplate`, `Statement`·`ResultSet`으로 `SELECT` 조회 |
+| `26.10.23` | [261023-preparedstatement-crud-dao.md](./07_jdbc/261023-preparedstatement-crud-dao.md) | `close` 오버로딩, `PreparedStatement` 위치 홀더, XML 쿼리 분리(`loadFromXML`), SQL Injection 비교, `executeUpdate()` CRUD, DAO 패턴 |
