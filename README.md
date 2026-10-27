@@ -110,3 +110,4 @@
 | 날짜 | 파일명 | 핵심 학습 내용 |
 | :--- | :--- | :--- |
 | `26.10.26` | [261026-spring-ioc-di-bean-scope.md](./08_spring/261026-spring-ioc-di-bean-scope.md) | IoC Container, XML·Java Config·Component Scan으로 Bean 등록, DI(setter·생성자 주입), `@Autowired`, `@Primary`·`@Qualifier`·List 주입, Bean Scope(singleton/prototype) |
+| `26.10.27` | [261027-bean-lifecycle-properties-request-mapping.md](./08_spring/261027-bean-lifecycle-properties-request-mapping.md) | Bean `initMethod`·`destroyMethod`, `@PropertySource`·`@Value` 외부 설정값 주입, Spring Boot 시작, `@RestController`·`@RequestMapping`·HTTP 메소드별 매핑, `@PathVariable`, `ResponseEntity`, `@RequestParam` |
