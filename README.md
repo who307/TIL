@@ -111,3 +111,4 @@
 | :--- | :--- | :--- |
 | `26.10.26` | [261026-spring-ioc-di-bean-scope.md](./08_spring/261026-spring-ioc-di-bean-scope.md) | IoC Container, XML·Java Config·Component Scan으로 Bean 등록, DI(setter·생성자 주입), `@Autowired`, `@Primary`·`@Qualifier`·List 주입, Bean Scope(singleton/prototype) |
 | `26.10.27` | [261027-bean-lifecycle-properties-request-mapping.md](./08_spring/261027-bean-lifecycle-properties-request-mapping.md) | Bean `initMethod`·`destroyMethod`, `@PropertySource`·`@Value` 외부 설정값 주입, Spring Boot 시작, `@RestController`·`@RequestMapping`·HTTP 메소드별 매핑, `@PathVariable`, `ResponseEntity`, `@RequestParam` |
+| `26.10.28` | [261028-handler-method-jackson-exception-handler.md](./08_spring/261028-handler-method-jackson-exception-handler.md) | `@RequestParam` Map·`@RequestBody`·`@RequestHeader`·`@CookieValue`, Jackson 직렬화/역직렬화, `@JsonProperty`·`@JsonFormat`, `ObjectMapper`, `@RestControllerAdvice`·`@ExceptionHandler` 전역 예외 처리, `ErrorResponse`, `@Valid` Bean Validation |
