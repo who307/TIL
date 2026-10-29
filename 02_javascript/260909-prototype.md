@@ -10,9 +10,15 @@
 
 ---
 
-## 핵심 내용(코드)
+## 1. 옵셔널 체이닝 연산자 (`?.`)
 
-### 옵셔널 체이닝 연산자 (`?.`)
+* **한 줄 비유**: 상자를 열기 전에 **"상자가 있긴 해?"** 하고 먼저 확인하는 것. 상자가 없으면 열지 않고 "없음(`undefined`)"이라고만 말함.
+* **왜 필요한가**: `null`이나 `undefined`에서 `.value`처럼 프로퍼티를 꺼내려 하면 `TypeError`가 나면서 프로그램이 멈춤.
+* **동작**: `A?.B`
+  1. A가 `null` 또는 `undefined`인가?
+  2. 그렇다 → B를 찾지 않고 바로 `undefined`를 돌려줌.
+  3. 아니다 → 평소처럼 `A.B`를 꺼냄.
+* **`&&`와의 차이**: `str && str.length`는 `str`이 Falsy(빈 문자열, 0 등)이기만 해도 멈춤. `?.`는 **오직 `null`/`undefined`일 때만** 멈춤.
 
 ```javascript
 /**
@@ -39,7 +45,22 @@ console.log(len); // 0
 
 ```
 
-### null 병합 연산자 (`??`)
+* **한 줄씩 보기**
+  * `obj.value` → `obj`가 `null`이라 꺼낼 수 없음 → `TypeError` → 주석 처리.
+  * `obj?.value` → `obj`가 `null`이므로 1~2단계에서 멈춤 → `undefined`
+  * `str && str.length` → `""`는 Falsy → `&&`는 왼쪽이 Falsy면 왼쪽 값을 그대로 돌려줌 → `len`에 `""`가 들어감. 우리가 원한 건 길이 0이었는데 엉뚱한 값이 됨.
+  * `str?.length` → `""`는 `null`/`undefined`가 아님 → 정상적으로 `.length`를 꺼냄 → `0`
+
+---
+
+## 2. null 병합 연산자 (`??`)
+
+* **한 줄 비유**: "값이 **아예 없을 때만** 기본값을 쓸게"라는 규칙.
+* **동작**: `A ?? B`
+  1. A가 `null` 또는 `undefined`인가?
+  2. 그렇다 → B(기본값)를 돌려줌.
+  3. 아니다 → A를 그대로 돌려줌. A가 `""`이나 `0`이어도 A를 씀.
+* **`||`와의 차이**: `A || B`는 A가 Falsy이기만 하면 B를 씀. 그래서 사용자가 일부러 0이나 빈 문자열을 넣어도 기본값으로 바뀌어 버림.
 
 ```javascript
 /**
@@ -59,7 +80,18 @@ console.log(value); // ""
 
 ```
 
-### 생성자 함수
+* **한 줄씩 보기**
+  * `null ?? "기본 값"` → 왼쪽이 `null` → 오른쪽 사용 → `기본 값`
+  * `"" || "기본 값"` → `""`는 Falsy → 오른쪽 사용 → `기본 값` (원래 값 `""`가 사라짐)
+  * `"" ?? "기본 값"` → `""`는 `null`/`undefined`가 아님 → 왼쪽 그대로 → `""`
+
+---
+
+## 3. 생성자 함수 (Constructor Function)
+
+* **한 줄 비유**: 생성자 함수는 **붕어빵 틀**임. 틀 하나로 팥붕, 슈붕을 계속 찍어낼 수 있음. 찍혀 나온 붕어빵 하나하나를 **인스턴스**라고 부름.
+* **왜 필요한가**: 객체 리터럴(`{ }`)로 학생을 100명 만들면 같은 구조를 100번 복사해서 써야 함. 생성자 함수는 구조를 한 번만 쓰고 값만 바꿔 찍어냄.
+* **규칙**: 함수 이름을 **대문자로 시작**하고(`Student`), 부를 때 앞에 **`new`** 를 붙임.
 
 ```javascript
 /**
@@ -99,7 +131,24 @@ console.log(student4.getInfo()); // 코끼리는 25세 입니다.
 
 ```
 
-### 인스턴스 생성 과정과 `new.target`
+* **한 줄씩 보기**
+  * `student1` → 한 명을 직접 손으로 만든 방식. 다른 학생을 만들려면 이 덩어리를 또 써야 함.
+  * `new Student("원숭이", 40)` → 틀에 "원숭이", 40을 넣고 찍음 → `{ name: "원숭이", age: 40, getInfo }`
+  * `student3.getInfo()` → `원숭이는 40세 입니다.` / `student4.getInfo()` → `코끼리는 25세 입니다.`
+  * `student3 === student4` → 같은 틀에서 나왔어도 **서로 다른 붕어빵** → `false`
+  * `student3.age = 32` → `student3`만 바뀜 → `원숭이는 32세 입니다.` / `student4`는 그대로 `25세`
+
+---
+
+## 4. `new`가 하는 일과 `new.target`
+
+* **`new Student(...)`를 쓰면 일어나는 일 (4단계)**
+  1. 빈 객체 `{}`를 새로 만듦.
+  2. 함수 안의 `this`가 그 빈 객체를 가리키게 함.
+  3. 함수 본문을 실행 → `this.name = ...`으로 빈 객체에 칸을 채움.
+  4. 다 채운 객체를 자동으로 돌려줌 (`return`을 안 써도 됨).
+* **`new`를 깜빡하면?**: 위 단계가 일어나지 않음. 엄격 모드(`"use strict"`)에서는 `this`가 `undefined`라 `this.name = ...`에서 에러가 남. 엄격 모드가 아니면 `this`가 전역 객체가 되어 전역 변수를 더럽힘.
+* **`new.target`**: 함수가 `new`로 불렸으면 그 함수 자신, 그냥 불렸으면 `undefined`가 들어 있는 값. 이걸로 "new를 깜빡했는지" 검사할 수 있음.
 
 ```javascript
 "use strict"; // 엄격 모드
@@ -137,7 +186,25 @@ for (let key in dog) {
 
 ```
 
-### 프로토타입 체인 (Prototype Chain)
+* **실행 결과 따라가기**
+  * `this가 있는가: true` → 1~2단계에서 빈 객체가 만들어져 `this`가 가리키고 있음.
+  * `name이 있는가: false` → 아직 3단계 전이라 빈 객체임.
+  * `초기화한 값:  호랑이 10` → 3단계에서 칸이 채워짐.
+  * `객체를 반환받았는가: true` → 4단계에서 객체가 돌아옴.
+  * `new Dog("바둑이", 3)` → `new`로 불렀으니 `new.target`이 `Dog` → `if`를 건너뛰고 정상 생성.
+  * `console.log(dog)` → `Dog { name: '바둑이', age: 3 }`
+  * `for...in` → 키를 하나씩 → `name`, `age`
+  * 만약 `Dog("바둑이", 3)`처럼 `new` 없이 부르면 → `new.target`이 `undefined` → 안내 문구를 찍고 **스스로 `new Dog(...)`를 다시 불러** 올바른 객체를 돌려줌.
+
+---
+
+## 5. 프로토타입 체인 (Prototype Chain)
+
+* **한 줄 비유**: 모르는 단어가 있으면 **내 공책 → 형 공책 → 아빠 공책** 순서로 찾아보는 것. 이렇게 이어진 공책 줄을 **프로토타입 체인**이라고 함.
+* **프로토타입(prototype)**: 객체가 "모르면 물어볼" **부모 객체**. 자기한테 없는 프로퍼티는 부모에게서 빌려 씀(상속).
+* **`Object.create(부모)`**: 빈 객체를 새로 만들고, 그 객체의 부모(프로토타입)를 `부모`로 정해줌.
+* **찾는 순서**: 내 칸에 있나? → 없으면 부모 → 없으면 부모의 부모 → … → 끝까지 없으면 `undefined`
+* **섀도잉(Shadowing)**: 부모에게 있는 이름과 **같은 이름을 내가 가지면**, 내 것이 부모 것을 가림. 그림자처럼 덮는다고 해서 붙은 이름임.
 
 ```javascript
 const user = {
@@ -177,6 +244,26 @@ console.log(greedyStudent.id); // user
 greedyStudent.login(); // user님이 로그인 되었습니다.
 
 ```
+
+* **체인 구조**: `greedyStudent` → (부모) `student` → (부모) `user`
+
+| 객체 | 자기가 직접 가진 칸 |
+| :--- | :--- |
+| `user` | `id: "user"`, `activate: true`, `login` |
+| `student` | `passion: true` |
+| `greedyStudent` | `greed: true`, `id: "student01"` |
+
+* **한 줄씩 따라가기**
+  * `student.activate` → `student`에 없음 → 부모 `user`에서 찾음 → `true`
+  * `console.log(student)` → **자기가 직접 가진 칸만** 보여줌 → `{ passion: true }`
+  * `Object.getPrototypeOf(student)` → 부모를 알려줌 → `user` 객체
+  * `Object.hasOwn(student, "activate")` → "**직접** 가지고 있니?" → 빌려 쓰는 것이라 `false`. `passion`은 직접 가짐 → `true`
+  * `greedyStudent.activate` → 나 → `student` → `user`까지 올라가 찾음 → `true`
+  * `greedyStudent.passion` → 나 → `student`에서 찾음 → `true`
+  * `greedyStudent.missing` → 끝까지 없음 → `undefined`
+  * `greedyStudent.login()` → `login`은 `user`에서 빌려왔지만, **부른 주체가 `greedyStudent`** 이므로 `this`는 `greedyStudent` → `this.id`는 내 칸의 `"student01"` → `student01님이 로그인 되었습니다.`
+  * `delete greedyStudent.id` → 내 `id`가 사라짐 → 가려져 있던 `user`의 `id`가 다시 보임 → `user`
+  * 다시 `login()` → `this.id`를 찾아 올라가 `user`의 `"user"` → `user님이 로그인 되었습니다.`
 
 ---
 

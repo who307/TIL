@@ -59,7 +59,7 @@
 | `26.09.21` | [260921-hooks.md](./03_react/260921-hooks.md) | `useMemo`, `useCallback`, `useRef`, 커스텀 훅(Custom Hook), `Promise` 기초 |
 | `26.09.22` | [260922-async.md](./03_react/260922-async.md) | `async`/`await`, Native `fetch` vs `axios`, `useEffect` 비동기 상태 관리 |
 | `26.09.24` | [260924-next-layout.md](./03_react/260924-next-layout.md) | Next.js App Router 아키텍처, `RootLayout` 및 중첩 레이아웃(`Nested Layout`) |
-| `26.09.28` | [260928-next-metadata.md](./03_react/260928-next-metadata.md) | Next.js 메타데이터 구성, 전역 Provider Wrapper 주입 및 레이아웃 최적화 |
+| `26.09.28` | [260928-next-metadata.md](./03_react/260928-next-metadata.md) | 전역 `Providers` 주입, Hydration Mismatch 방지, Zustand 전역 상태·`persist`, `fetch` API 모듈화, TanStack Query 서버 상태 관리 |
 
 ---
 
