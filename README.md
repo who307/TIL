@@ -16,6 +16,7 @@
 - [06. Database](#-06-database)
 - [07. JDBC](#-07-jdbc)
 - [08. Spring](#-08-spring)
+- [09. JPA](#-09-jpa)
 
 ---
 
@@ -114,3 +115,11 @@
 | `26.10.28` | [261028-handler-method-jackson-exception-handler.md](./08_spring/261028-handler-method-jackson-exception-handler.md) | `@RequestParam` Map·`@RequestBody`·`@RequestHeader`·`@CookieValue`, Jackson 직렬화/역직렬화, `@JsonProperty`·`@JsonFormat`, `ObjectMapper`, `@RestControllerAdvice`·`@ExceptionHandler` 전역 예외 처리, `ErrorResponse`, `@Valid` Bean Validation |
 | `26.10.29` | [261029-file-upload-interceptor-cors.md](./08_spring/261029-file-upload-interceptor-cors.md) | `multipart/form-data`·`MultipartFile` 단일/다중 파일 업로드, UUID 저장명·경로 검증, `HandlerInterceptor`(`preHandle`·`afterCompletion`)·`addInterceptors`, CORS `addCorsMappings`, Next.js에서 Spring API 호출 |
 | `26.10.30` | [261030-rest-api-response-validation-swagger.md](./08_spring/261030-rest-api-response-validation-swagger.md) | REST URI 설계, 요청/응답 DTO 분리, `ResponseEntity` `ok`·`created`(`Location`)·`noContent`, `@NotNull`·`@Size`·`@Past` 검증과 `FieldError.getCode()` 에러 코드 매핑, springdoc Swagger(`@Tag`·`@Operation`·`@ApiResponse`·`@Schema`), `orElseThrow`로 404 처리 |
+
+---
+
+## 🧩 09. JPA
+
+| 날짜 | 파일명 | 핵심 학습 내용 |
+| :--- | :--- | :--- |
+| `26.11.02` | [261102-jpa-intro-persistence-context.md](./09_jpa/261102-jpa-intro-persistence-context.md) | JDBC 직접 SQL의 문제점(반복 코드·SQL 의존·패러다임 불일치·동일성), `persistence.xml`, `@Entity`·`@Id`·`@GeneratedValue`, `EntityManagerFactory`·`EntityManager`, `find`·`persist`·변경 감지·`remove`, `flush`·`clear`, 엔티티 생명주기(비영속·영속·준영속·삭제), `detach`·`merge` |
