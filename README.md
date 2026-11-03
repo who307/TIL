@@ -123,3 +123,4 @@
 | 날짜 | 파일명 | 핵심 학습 내용 |
 | :--- | :--- | :--- |
 | `26.11.02` | [261102-jpa-intro-persistence-context.md](./09_jpa/261102-jpa-intro-persistence-context.md) | JDBC 직접 SQL의 문제점(반복 코드·SQL 의존·패러다임 불일치·동일성), `persistence.xml`, `@Entity`·`@Id`·`@GeneratedValue`, `EntityManagerFactory`·`EntityManager`, `find`·`persist`·변경 감지·`remove`, `flush`·`clear`, 엔티티 생명주기(비영속·영속·준영속·삭제), `detach`·`merge` |
+| `26.11.03` | [261103-jpa-entity-mapping-association.md](./09_jpa/261103-jpa-entity-mapping-association.md) | Spring Boot JPA 전환(`application.yml`·`@PersistenceContext`·`@Transactional`·`@Commit`), `@Column` 속성, `@Enumerated(STRING)`, `ddl-auto`, `@Embeddable`·`@Embedded` 값 객체, `@ManyToOne`·`@JoinColumn`, `LAZY`·`EAGER`, `@OneToMany` 단방향, 양방향·`mappedBy`·연관관계의 주인, 연관관계 편의 메소드 |
