@@ -17,6 +17,7 @@
 - [07. JDBC](#-07-jdbc)
 - [08. Spring](#-08-spring)
 - [09. JPA](#-09-jpa)
+- [10. Security](#-10-security)
 
 ---
 
@@ -126,3 +127,12 @@
 | `26.11.03` | [261103-jpa-entity-mapping-association.md](./09_jpa/261103-jpa-entity-mapping-association.md) | Spring Boot JPA 전환(`application.yml`·`@PersistenceContext`·`@Transactional`·`@Commit`), `@Column` 속성, `@Enumerated(STRING)`, `ddl-auto`, `@Embeddable`·`@Embedded` 값 객체, `@ManyToOne`·`@JoinColumn`, `LAZY`·`EAGER`, `@OneToMany` 단방향, 양방향·`mappedBy`·연관관계의 주인, 연관관계 편의 메소드 |
 | `26.11.04` | [261104-spring-data-jpa-crud-query-paging.md](./09_jpa/261104-spring-data-jpa-crud-query-paging.md) | `JpaRepository` 기본 메소드(`save`·`findById`·`findAll`·`delete`), 변경 감지 수정, `open-in-view: false`, `@NotBlank`+`@Pattern` 검증, 쿼리 메소드 이름 규칙, JPQL `@Query`·`@Param`, `Pageable`·`Page`·`Page.map()`·`PageResponse`, N+1 문제, `JOIN FETCH`·`countQuery` |
 | `26.11.05` | [261105-native-query-transaction-cascade.md](./09_jpa/261105-native-query-transaction-cascade.md) | Native Query(`nativeQuery = true`)·텍스트 블록, 인터페이스 프로젝션, `LEFT JOIN`+`COUNT(컬럼)`, 윈도 함수 `RANK()`(vs `DENSE_RANK`·`ROW_NUMBER`), `ddl-auto: validate`·환경 변수 설정, `record` DTO, `@Transactional` 롤백 규칙(런타임/체크 예외·`rollbackFor`·예외 삼키기·내부 호출), 트랜잭션 없는 커밋 검증 테스트, `cascade = PERSIST`·`orphanRemoval` |
+| `26.11.06` | [261106-jpa-auditing-specification.md](./09_jpa/261106-jpa-auditing-specification.md) | JPA Auditing(`@EnableJpaAuditing`·`@MappedSuperclass`·`@EntityListeners`·`@CreatedDate`·`@LastModifiedDate`), 수정 시각과 `flush` 시점, `DATETIME(6)` 정밀도, `Specification`·`JpaSpecificationExecutor` 동적 검색(`Root`·`CriteriaBuilder`·`Predicate`), LIKE 이스케이프, `@RequestParam(required = false)` |
+
+---
+
+## 🔐 10. Security
+
+| 날짜 | 파일명 | 핵심 학습 내용 |
+| :--- | :--- | :--- |
+| `26.11.06` | [261106-spring-security-basic.md](./10_security/261106-spring-security-basic.md) | 인증(401) vs 인가(403), Security 필터 체인, `PasswordEncoder`·BCrypt 해시·솔트, 회원 가입(중복 검사·권한 고정), `UserDetailsService`·`UserDetails`·`User.withUsername`·`roles`, `DaoAuthenticationProvider`, `SecurityFilterChain`(CSRF·`STATELESS`·`requestMatchers`·`hasRole`), HTTP Basic, H2 테스트 프로필 |
