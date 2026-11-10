@@ -136,3 +136,4 @@
 | 날짜 | 파일명 | 핵심 학습 내용 |
 | :--- | :--- | :--- |
 | `26.11.06` | [261106-spring-security-basic.md](./10_security/261106-spring-security-basic.md) | 인증(401) vs 인가(403), Security 필터 체인, `PasswordEncoder`·BCrypt 해시·솔트, 회원 가입(중복 검사·권한 고정), `UserDetailsService`·`UserDetails`·`User.withUsername`·`roles`, `DaoAuthenticationProvider`, `SecurityFilterChain`(CSRF·`STATELESS`·`requestMatchers`·`hasRole`), HTTP Basic, H2 테스트 프로필 |
+| `26.11.10` | [261110-jwt-login-access-token.md](./10_security/261110-jwt-login-access-token.md) | 컨트롤러 `Authentication`·`getName()`, `MockMvc`+`httpBasic` 보안 테스트(401·403·200), 세션 vs JWT, JWT 구조·Claim, `SecretKey`·`JwtEncoder`·`JwtDecoder`·`JwtAuthenticationConverter`, `AuthenticationManager`(`ProviderManager`) 로그인, `JwtService` Access Token 발급, `TokenResponse`, 로그인 실패 401 처리 |
