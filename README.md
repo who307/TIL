@@ -147,3 +147,4 @@
 | 날짜 | 파일명 | 핵심 내용 |
 | :--- | :--- | :--- |
 | `26.11.02 ~` | [README.md](./11_fullstack-project/README.md) | **포켓헙 (PocketHub)**: Git 같은 파일 관리와 Task 관리를 합친 협업 서비스. 개요·팀 구성·기술 스택(Next.js 16·Spring Boot 3.5·MySQL 8)·구조·협업 규칙 |
+| `26.11.02 ~ 11.11` | [261102-planning.md](./11_fullstack-project/261102-planning.md) | **기획**: 프로젝트 개요·유사 서비스 분석, 요구사항 정의서(PR·리뷰 담당분), 정책정의서(권한·PR·리뷰·예외), 사용자 시나리오, 화면 설계서, API 명세서, ERD, 상태 값 불일치 정리 |
