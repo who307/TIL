@@ -18,6 +18,7 @@
 - [08. Spring](#-08-spring)
 - [09. JPA](#-09-jpa)
 - [10. Security](#-10-security)
+- [11. Fullstack Project](#-11-fullstack-project)
 
 ---
 
@@ -69,7 +70,7 @@
 
 | 프로젝트명 | 문서 링크 | 기간 | 설명 |
 | :--- | :--- | :--- | :--- |
-| **컬쳐맵 (Culture Map)** | [culture-map.md](./04_ui-projects/culture-map.md) | 26.09.29 ~ 26.10.01 | 영화, 공연, 축제, 전시 등 다양한 문화 행사 정보를 날짜/지역별로 통합 탐색하고 지도에서 위치를 확인하는 서비스 |
+| **컬처맵 (Culture Map)** | [culture-map.md](./04_ui-projects/culture-map.md) | 26.09.29 ~ 26.10.01<br>(~26.10.30 개선) | 영화, 공연, 축제, 전시 등 다양한 문화 행사 정보를 날짜/지역별로 통합 탐색하고 지도에서 위치를 확인하는 서비스. 영화관 지도 레이어·주간 편성표 디자인·Vercel 배포 ([배포 사이트](https://culture-map-pi.vercel.app)) |
 
 ---
 
@@ -138,3 +139,11 @@
 | `26.11.06` | [261106-spring-security-basic.md](./10_security/261106-spring-security-basic.md) | 인증(401) vs 인가(403), Security 필터 체인, `PasswordEncoder`·BCrypt 해시·솔트, 회원 가입(중복 검사·권한 고정), `UserDetailsService`·`UserDetails`·`User.withUsername`·`roles`, `DaoAuthenticationProvider`, `SecurityFilterChain`(CSRF·`STATELESS`·`requestMatchers`·`hasRole`), HTTP Basic, H2 테스트 프로필 |
 | `26.11.10` | [261110-jwt-login-access-token.md](./10_security/261110-jwt-login-access-token.md) | 컨트롤러 `Authentication`·`getName()`, `MockMvc`+`httpBasic` 보안 테스트(401·403·200), 세션 vs JWT, JWT 구조·Claim, `SecretKey`·`JwtEncoder`·`JwtDecoder`·`JwtAuthenticationConverter`, `AuthenticationManager`(`ProviderManager`) 로그인, `JwtService` Access Token 발급, `TokenResponse`, 로그인 실패 401 처리 |
 | `26.11.11` | [261111-refresh-token-cookie.md](./10_security/261111-refresh-token-cookie.md) | Access Token vs Refresh Token, `RefreshToken` 엔티티(`@OneToOne`·회원당 1행·`rotate`), `SecureRandom` 원문·SHA-256 해시 저장(BCrypt와 차이), `RefreshTokenService`(issue·`findValidToken` 4단계 검사·Refresh Token Rotation·revoke), `JwtService` 오버로드·`jti`, `AuthTokens`, `HttpOnly`·`Secure`·`SameSite`·`path` 쿠키, `@CookieValue`, 재발급·로그아웃 API·`permitAll`, `InvalidRefreshTokenException` 401, CORS `allowCredentials`·`.cors()`, Refresh Token·CORS 흐름 테스트 |
+
+---
+
+## 🏗️ 11. Fullstack Project
+
+| 날짜 | 파일명 | 핵심 내용 |
+| :--- | :--- | :--- |
+| | [README.md](./11_fullstack-project/README.md) | 풀스택 프로젝트 개요·기술 스택·문서 목록 (작성 예정) |
