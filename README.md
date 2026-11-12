@@ -146,4 +146,4 @@
 
 | 날짜 | 파일명 | 핵심 내용 |
 | :--- | :--- | :--- |
-| | [README.md](./11_fullstack-project/README.md) | 풀스택 프로젝트 개요·기술 스택·문서 목록 (작성 예정) |
+| `26.11.02 ~` | [README.md](./11_fullstack-project/README.md) | **포켓헙 (PocketHub)**: Git 같은 파일 관리와 Task 관리를 합친 협업 서비스. 개요·팀 구성·기술 스택(Next.js 16·Spring Boot 3.5·MySQL 8)·구조·협업 규칙 |
