@@ -19,6 +19,7 @@
 - [09. JPA](#-09-jpa)
 - [10. Security](#-10-security)
 - [11. Fullstack Project](#-11-fullstack-project)
+- [12. AI Agent](#-12-ai-agent)
 
 ---
 
@@ -148,3 +149,11 @@
 | :--- | :--- | :--- |
 | `26.11.02 ~` | [README.md](./11_fullstack-project/README.md) | **포켓헙 (PocketHub)**: Git 같은 파일 관리와 Task 관리를 합친 협업 서비스. 개요·팀 구성·기술 스택(Next.js 16·Spring Boot 3.5·MySQL 8)·구조·협업 규칙 |
 | `26.11.02 ~ 11.11` | [261102-planning.md](./11_fullstack-project/261102-planning.md) | **기획**: 프로젝트 개요·유사 서비스 분석, 요구사항 정의서(PR·리뷰 담당분), 정책정의서(권한·PR·리뷰·예외), 사용자 시나리오, 화면 설계서, API 명세서, ERD, 상태 값 불일치 정리 |
+
+---
+
+## 🤖 12. AI Agent
+
+| 날짜 | 파일명 | 핵심 학습 내용 |
+| :--- | :--- | :--- |
+| `26.11.23` | [261123-python-basics-for-llm.md](./12_ai-agent/261123-python-basics-for-llm.md) | Python 변수·f-string, 리스트(`append`·`insert`·`pop`)·딕셔너리(`get`·`KeyError`), 슬라이싱, 들여쓰기 블록·`if`/`elif`·`for in`, 리스트 컴프리헨션, 함수 타입 힌트·기본값·키워드 인자, `json.dumps`/`loads`·`ensure_ascii`, `try`/`except JSONDecodeError`, LLM 프롬프트 생성·응답 검증(`isinstance`·`raise ValueError`), `if __name__ == "__main__"`, `.env`·`load_dotenv`·OpenAI Chat Completions 호출 |
