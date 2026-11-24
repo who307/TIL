@@ -1,8 +1,8 @@
-# Python 기초: 자료형·컬렉션·제어문·컴프리헨션·함수·JSON·예외 처리 · LLM 응답 다루기 · OpenAI API 첫 호출 (TIL)
+# Python 기초: 자료형·컬렉션·제어문·컴프리헨션·함수·JSON·예외 처리 · LLM 응답 검증 · NumPy 벡터·코사인 유사도 · OpenAI 대화 봇 (TIL)
 
-> 실습 환경: Python 3, `python-dotenv`, `openai` 패키지
+> 실습 환경: Python 3, `numpy`, `python-dotenv`, `openai` 패키지
 >
-> AI Agent 과정의 첫 시간. Java·JavaScript로 배운 개념을 Python 문법으로 다시 정리하고, LLM에 보낼 **프롬프트(JSON)를 만들고 응답(JSON)을 검증**하는 연습까지 진행함. 마지막에 OpenAI API를 직접 호출하는 `bot.py`를 만듦. (`02_numpy`는 파일만 만들어 둔 상태)
+> AI Agent 과정의 첫 시간. Java·JavaScript로 배운 개념을 Python 문법으로 다시 정리하고, LLM에 보낼 **프롬프트(JSON)를 만들고 응답(JSON)을 검증**하는 연습까지 진행함. 이어서 NumPy로 벡터와 **코사인 유사도**를 계산해 보고, 마지막에 OpenAI API로 **대화 이력을 기억하는 콘솔 챗봇**(`bot.py`)을 만듦
 
 ## 0. 오늘의 흐름
 
@@ -13,8 +13,9 @@
 | `03_comprehension.py` | 리스트 컴프리헨션 |
 | `04_functions.py` | `def`, 타입 힌트, 기본값, 키워드 인자 |
 | `05_json_and_exceptions.py` | `json.dumps`·`json.loads`, `try`·`except` |
-| `06_python_for_llm.py` | LLM 프롬프트 만들기, 응답 JSON 검증 |
-| `03_gpt/01_gpt-basic/bot.py` | `.env`로 API 키 읽기, OpenAI Chat Completions 호출 |
+| `06_python_for_llm.py` | LLM 프롬프트 만들기, 응답 JSON 검증, 예외 종류별 처리, `dict.items()` |
+| `02_numpy/01_vectors_for_gpt.py` | NumPy 배열 연산, 벡터, 내적·길이, 코사인 유사도 |
+| `03_gpt/01_gpt-basic/bot.py` | `.env`로 API 키 읽기, `system`·`user`·`assistant` 메시지, 대화 이력, 응답 검증, 콘솔 대화 루프 |
 
 ---
 
@@ -228,18 +229,68 @@ def parse_response(reply):
 * `isinstance(x, dict)` = Java `x instanceof Map`
 * `raise ValueError(...)` = Java `throw new IllegalArgumentException(...)`
 * 잘못된 응답이면 **빨리 예외로 멈추고**, 호출하는 쪽에서 재요청하거나 사용자에게 알리게 함. 이상한 값이 화면·DB까지 흘러가는 것보다 나음
-* 테스트용 응답을 `RESPONSE_EXAMPLES` 딕셔너리(정상 / 깨진 JSON / 필수 필드 누락)로 모아 둠
-
-### `if __name__ == "__main__":`
+### 예외 종류별로 처리하기
 
 ```python
+def show_result(reply):
+    try:
+        items = parse_response(reply)
+    except json.JSONDecodeError:            # JSON 문법 자체가 깨짐
+        print("응답을 JSON으로 읽을 수 없습니다")
+        return
+    except ValueError as error:             # JSON은 맞는데 형식이 틀림
+        print("응답 형식 오류", error)
+        return
+
+    for item in items:
+        print(f'{item["id"]}: {item["sentiment"]} / {item["score"]}점')
+        print(f' 근거: {item["key_reason"]}')
+```
+
+* `except 예외 as error`: 예외 객체를 변수로 받아 메시지를 출력 (Java `catch (ValueError e)`)
+* **`except` 순서가 중요함**: `json.JSONDecodeError`는 `ValueError`의 **하위 클래스**라서, `ValueError`를 먼저 쓰면 깨진 JSON도 거기서 잡혀 "형식 오류"로 나옴. Java에서 `catch`를 좁은 예외부터 쓰는 것과 같은 규칙
+* 실패하면 `return`으로 바로 끝내고, 성공했을 때만 아래 출력으로 내려감 (조기 반환)
+
+### 테스트 응답 3종 돌려 보기
+
+```python
+BROKEN_JSON = '{"items": []'      # 닫는 괄호 없음
+MISSING_FIELD_REPLY = '{"items": [{"id": 1, "sentiment": "mixed", "key_reason": "..."}]}'   # score 없음
+
+RESPONSE_EXAMPLES = {
+    "정상 응답": SAMPLE_REPLY,
+    "깨진 JSON": BROKEN_JSON,
+    "필수 필드 누락": MISSING_FIELD_REPLY,
+}
+
 def main():
-    prompt = build_prompt(FEEDBACKS)
-    print(prompt)
+    print(build_prompt(FEEDBACKS))
+
+    # 딕셔너리.items(): 키와 값을 한 쌍씩 꺼냄
+    for name, reply in RESPONSE_EXAMPLES.items():
+        print(f"\n[{name}]")
+        show_result(reply)
 
 if __name__ == "__main__":
     main()
 ```
+
+```text
+[정상 응답]
+1: mixed / 75점
+ 근거: 진도는 빠르지만 실습이 도움이 됩니다.
+2: negative / 35점
+...
+[깨진 JSON]
+응답을 JSON으로 읽을 수 없습니다
+[필수 필드 누락]
+응답 형식 오류 필수 필드가 없습니다: score
+```
+
+* `for name, reply in d.items()`: Java `for (Map.Entry<K, V> e : map.entrySet())`, JS `Object.entries(obj)`와 같음. 튜플 `(키, 값)`을 두 변수로 나눠 받는 것(언패킹)
+* 실제 API를 부르지 않고도 **정상·깨진 JSON·필드 누락** 세 경우의 처리를 미리 확인할 수 있음
+
+### `if __name__ == "__main__":`
 
 * 파일을 **직접 실행**하면 `__name__`이 `"__main__"`이라 `main()`이 실행되고, 다른 파일에서 **`import`하면** 실행되지 않음
 * Java의 `public static void main`처럼 시작점을 명시하는 관용구. 다른 파일이 `build_prompt`만 가져다 쓸 수 있게 해 줌
@@ -247,50 +298,170 @@ if __name__ == "__main__":
 
 ---
 
-## 7. OpenAI API 첫 호출 (`bot.py`)
+## 7. NumPy: 벡터와 코사인 유사도
+
+NumPy는 숫자 배열을 만들고 **배열 전체를 한 번에 계산**하는 라이브러리. 임베딩(텍스트를 숫자 벡터로 바꾼 것)을 비교할 때 이 계산을 씀.
 
 ```python
-import os
-from dotenv import load_dotenv
-from openai import APIError, OpenAI
+import numpy as np
 
-load_dotenv()                                    # .env → 환경변수
-MODEL = os.getenv("OPENAI_MODEL", "gpt-5-mini")  # 없으면 기본 모델
-
-def get_reply(client, messages):
-    response = client.chat.completions.create(model=MODEL, messages=messages)
-    return response.choices[0].message.content
-
-def main():
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key or api_key == "sk-your-key-here":
-        print("OPENAI_API_KEY 가 없습니다. .env 파일에 키를 넣어 주세요.")
-        return
-
-    client = OpenAI(api_key=api_key)
-    messages = [{"role": "user", "content": "python 리스트가 뭐에요?"}]
-    try:
-        print("Bot:", get_reply(client, messages))
-    except APIError as e:
-        print("API 호출 실패:", e)
+left, right = [1, 2], [3, 4]
+left + right                        # [1, 2, 3, 4]  리스트의 +는 이어 붙이기
+np.array(left) + np.array(right)    # [4 6]         배열의 +는 같은 위치끼리 계산
 ```
 
-* **API 키는 코드에 쓰지 않고 `.env`에** 두고 `load_dotenv()` + `os.getenv()`로 읽음. Spring에서 `application.yml`에 `${JWT_SECRET}`으로 환경 변수를 쓴 것과 같은 이유
-* `.env`는 `.gitignore`에 추가해서 저장소에 올라가지 않게 함 (오늘 `.gitignore`에 `.env`, `__pycache__/`, `*.pyc` 추가)
-* 키가 없거나 예시 값(`sk-your-key-here`) 그대로면 호출 전에 안내하고 끝냄 → 의미 없는 401 에러 대신 원인을 바로 알려 줌
-* `messages`: 대화 기록을 `{"role": ..., "content": ...}` 딕셔너리의 리스트로 보냄 (`user`·`assistant`·`system`). 6장에서 연습한 "딕셔너리의 리스트" 그대로
-* 응답 텍스트 위치: `response.choices[0].message.content` (여러 후보 중 첫 번째)
-* 네트워크·인증·한도 초과 같은 실패는 `APIError`로 잡음
+* `import numpy as np`: 모듈에 별칭을 붙여 `np.`로 씀 (관례)
+* 파이썬 리스트로 같은 계산을 하려면 `[a + b for a, b in zip(left, right)]`처럼 반복문이 필요한데, NumPy는 연산자 하나로 끝남
+
+### 벡터로 영화 표현하기
+
+순서를 `[액션, 스릴러, 코미디, 감동]`으로 정해 두고 각 영화를 숫자로 표시함.
+
+```python
+moana        = np.array([0, 0, 0, 1])   # 감동
+toy_story    = np.array([0, 0, 1, 1])   # 코미디 + 감동
+action_movie = np.array([1, 0, 0, 0])   # 액션
+```
+
+* **벡터**: 같은 기준과 순서로 나열한 숫자 목록. 순서(기준)가 같아야 서로 비교할 수 있음
+
+### 코사인 유사도
+
+```python
+def cosine_similarity(a, b):
+    dot = np.dot(a, b)                # 내적: 같은 위치끼리 곱해서 모두 더함
+    length_a = np.linalg.norm(a)      # 벡터의 길이 (원점에서의 거리)
+    length_b = np.linalg.norm(b)
+    return dot / (length_a * length_b)
+```
+
+$$\cos\theta = \frac{a \cdot b}{\lVert a \rVert \, \lVert b \rVert}$$
+
+| 비교 | 내적 | 길이 곱 | 유사도 | 의미 |
+| :--- | :---: | :---: | :---: | :--- |
+| 모아나 ↔ 모아나 | 1 | 1 × 1 | **1.0** | 방향이 완전히 같음 |
+| 모아나 ↔ 토이스토리 | 1 | 1 × √2 | **약 0.707** | "감동"이 겹쳐서 꽤 비슷함 |
+| 모아나 ↔ 액션영화 | 0 | 1 × 1 | **0.0** | 겹치는 특징이 없음 |
+
+* 두 벡터가 이루는 **각도(방향)**를 비교하는 것이라 값의 크기보다 "어떤 특징이 함께 있는지"를 봄. 1에 가까울수록 비슷함
+* 길이로 나누는 이유: 특징 값이 커도 방향이 같으면 같은 점수가 나오게 하려고 (정규화)
+* LLM에서는 문장을 임베딩 벡터로 바꾼 뒤 이 방식으로 **의미가 비슷한 문서를 찾음** (검색·추천·RAG의 기초)
 
 ---
 
-## ⚠️ 코드에서 본 것
+## 8. OpenAI 대화 봇 (`bot.py`)
 
-| 위치 | 내용 |
+처음엔 질문 하나를 보내고 끝나는 코드였는데, **질문을 계속 받고 앞의 대화를 기억하는 콘솔 챗봇**으로 바꿈.
+
+### 구조
+
+```text
+main() ─ load_dotenv, 키 확인, OpenAI 클라이언트 생성
+  └─ chat_loop(reply_to)          입력 받기 · 메시지 조립 · 이력 관리
+        └─ reply_to(messages)     = live_reply → request_reply(client, messages)  실제 API 호출
+                                    (sample_reply로 바꾸면 API 없이 테스트)
+```
+
+### API 호출과 응답 검증
+
+```python
+def request_reply(client, messages):
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=messages,
+        max_completion_tokens=500,   # 한 답변에 쓸 수 있는 토큰 수 상한
+        temperature=0.7,             # 답변의 다양성 (낮을수록 일정, 높을수록 다양)
+    )
+    choice = response.choices[0]
+    reply = (choice.message.content or "").strip()
+    if choice.finish_reason != "stop" or not reply:
+        raise ValueError("완료된 텍스트 응답을 받지 못했습니다.")
+    return reply
+```
+
+| 항목 | 의미 |
 | :--- | :--- |
-| `06_python_for_llm.py` `MISSING_FIELD_REPLY` | 이름은 "필수 필드 누락"인데 항목에 `id`·`sentiment`·`score`·`key_reason`이 **모두 들어 있음** → `parse_response`가 실패하지 않고 통과함. 예를 들어 `"key_reason": ...`을 빼야 의도대로 `ValueError("필수 필드가 없습니다: key_reason")`이 남 |
-| `06_python_for_llm.py` `main()` | 지금은 프롬프트 출력만 하고 `RESPONSE_EXAMPLES`로 `parse_response`를 돌려 보는 부분은 아직 없음. `for name, reply in RESPONSE_EXAMPLES.items():` + `try`/`except (json.JSONDecodeError, ValueError)`로 세 경우를 확인할 수 있음 |
-| `02_string_and_control_flow.py` | 출력 문구 오타 `점쉬` → `점수` |
+| `max_completion_tokens` | 답변 길이 상한. 비용과 응답 시간을 제한함 |
+| `temperature` | 0에 가까우면 매번 비슷한 답, 높으면 표현이 다양해짐 |
+| `finish_reason` | `"stop"` = 정상 종료. `"length"`면 토큰 상한에 걸려 **답이 중간에 잘린 것** |
+| `content or ""` | `content`가 `None`일 수 있어서 빈 문자열로 바꾼 뒤 `.strip()` |
+
+* 6장과 같은 원칙: **응답을 그대로 믿지 않고**, 잘린 답·빈 답이면 `ValueError`로 처리함
+
+### 대화 루프와 이력
+
+```python
+def chat_loop(reply_to):
+    history = []
+    system = {"role": "system", "content": "당신은 친절한 강사입니다."}
+
+    while True:
+        try:
+            question = input("You:").strip()
+        except (EOFError, KeyboardInterrupt):    # Ctrl+D / Ctrl+C
+            break
+        if question.lower() in {"exit", "quit"}:
+            break
+        if not question:                         # 빈 문자열은 False
+            continue
+
+        user = {"role": "user", "content": question}
+        messages = [system] + history + [user]
+        try:
+            reply = reply_to(messages)
+        except (APIError, ValueError) as error:
+            print("응답 실패", error)
+            continue
+        print("Bot:", reply)
+        history = (history + [user, {"role": "assistant", "content": reply}])[-10:]
+    print("종료합니다")
+```
+
+| role | 역할 |
+| :--- | :--- |
+| `system` | 모델의 역할·말투를 정하는 지시 ("친절한 강사"). 매 요청 맨 앞에 붙임 |
+| `user` | 사용자의 질문 |
+| `assistant` | 모델이 했던 답변. 다시 보내야 앞의 대화를 "기억"함 |
+
+* **API는 이전 대화를 기억하지 않음(stateless)**. 그래서 매번 `system + 지금까지의 이력 + 새 질문`을 통째로 보냄. JWT를 매 요청에 실어 보낸 것처럼, 상태는 클라이언트가 들고 다님
+* `[-10:]`: 슬라이싱으로 **최근 10개 메시지(5번의 문답)만** 남김. 이력이 길어질수록 토큰(비용)이 늘고 모델의 입력 한도를 넘을 수 있어서
+* 실패했을 때는 `continue`로 넘어가 이력에 넣지 않음 → 답을 못 받은 질문이 이력에 남지 않음
+* `in {"exit", "quit"}`: 중괄호에 값만 있으면 **set(집합)**. 포함 여부 확인용
+* `except (EOFError, KeyboardInterrupt)`: 튜플로 여러 예외를 한 번에 잡음 (Java `catch (A | B e)`)
+
+### `main()`과 함수를 값으로 넘기기
+
+```python
+def main():
+    load_dotenv()
+    if not os.getenv("OPENAI_API_KEY"):
+        raise ValueError(".env에 OPENAI_API_KEY를 설정하세요.")
+
+    with OpenAI(timeout=20.0, max_retries=0) as client:
+        def live_reply(messages):
+            return request_reply(client, messages)
+
+        chat_loop(live_reply)
+```
+
+* **API 키는 코드에 쓰지 않고 `.env`에** 두고 `load_dotenv()`로 환경 변수에 올림. `OpenAI()`는 환경 변수 `OPENAI_API_KEY`를 자동으로 읽음. Spring에서 `${JWT_SECRET}`을 환경 변수로 뺀 것과 같은 이유
+* `.env`는 `.gitignore`에 추가해서 저장소에 올라가지 않게 함 (`.gitignore`에 `.env`, `__pycache__/`, `*.pyc` 추가)
+* `with ... as client:` = Java try-with-resources. 블록이 끝나면 클라이언트 연결을 자동으로 닫음
+* `timeout=20.0`(20초 넘으면 포기), `max_retries=0`(실패 시 자동 재시도 안 함 → 실습에서 실패 원인을 바로 보기 위해)
+* `chat_loop`는 **함수(`reply_to`)를 인자로 받음**. 실제 호출은 `live_reply`, 테스트는 `sample_reply`를 넘기면 되므로 API 키·비용 없이 대화 루프를 확인할 수 있음 (JS 콜백, Java 함수형 인터페이스·람다와 같은 개념)
+* `live_reply`는 `main` 안에서 정의해 바깥의 `client`를 기억하는 **클로저**. `chat_loop`는 `client`를 몰라도 됨
+
+---
+
+## 9. 고친 것
+
+어제 실습 코드에서 찾은 부분을 수정함.
+
+| 위치 | 문제 | 수정 |
+| :--- | :--- | :--- |
+| `06_python_for_llm.py` `MISSING_FIELD_REPLY` | 이름은 "필수 필드 누락"인데 필드가 모두 있어서 검증을 통과함 | `score`를 빼서 `필수 필드가 없습니다: score`가 나오게 함 |
+| `06_python_for_llm.py` `main()` | 프롬프트 출력만 하고 응답 검증은 실행하지 않음 | `show_result`와 `RESPONSE_EXAMPLES.items()` 반복 추가 |
+| `02_string_and_control_flow.py` | 출력 문구 오타 `점쉬` | `점수` |
 
 ---
 
@@ -301,9 +472,11 @@ def main():
 3. 슬라이싱 `[시작:끝]`은 끝을 포함하지 않고, 컴프리헨션 `[결과 for x in 목록 if 조건]`은 filter + map을 한 줄로 씀
 4. 함수는 타입 힌트(`: str`, `-> str`)·기본값·키워드 인자를 지원함. 타입 힌트는 실행 시 검사하지 않음
 5. `json.dumps`(→ 문자열, 한글은 `ensure_ascii=False`)·`json.loads`(문자열 →), 깨진 JSON은 `json.JSONDecodeError`로 잡음
-6. LLM 응답은 그냥 문자열이므로 **JSON 문법 → 구조(`isinstance`) → 필수 키(`in`)** 순서로 검증하고, 틀리면 `raise ValueError`
-7. `if __name__ == "__main__":`으로 직접 실행할 때만 `main()`을 돌림
-8. OpenAI 호출은 `.env`의 키를 `load_dotenv` + `os.getenv`로 읽고, `messages` 리스트를 보내 `choices[0].message.content`로 답을 받음
+6. LLM 응답은 그냥 문자열이므로 **JSON 문법 → 구조(`isinstance`) → 필수 키(`in`)** 순서로 검증하고, 틀리면 `raise ValueError`. 받는 쪽에서는 하위 예외인 `JSONDecodeError`를 `ValueError`보다 먼저 잡음
+7. `if __name__ == "__main__":`으로 직접 실행할 때만 `main()`을 돌리고, `dict.items()`로 키·값을 함께 반복함
+8. NumPy 배열은 같은 위치끼리 계산하고, 코사인 유사도 = 내적 ÷ (길이 × 길이)로 두 벡터의 방향이 얼마나 비슷한지(1 = 같음, 0 = 무관) 구함. 임베딩 검색의 기초
+9. OpenAI API는 대화를 기억하지 않으므로 `system + 이력 + 새 질문`을 매번 보내고, 이력은 `[-10:]`으로 최근 것만 유지함
+10. 응답은 `finish_reason == "stop"`과 빈 문자열 여부까지 확인하고, 키는 `.env` + `load_dotenv`, 클라이언트는 `with`로 열고 닫음
 
 ---
 
@@ -311,4 +484,6 @@ def main():
 
 * Java·JS에서 배운 개념이 거의 그대로라 문법만 바꿔 끼우는 느낌이었음. 특히 컴프리헨션은 처음엔 낯설었지만 for문 버전과 나란히 보니 읽는 순서가 바로 이해됨
 * LLM이라고 하면 프롬프트만 잘 쓰면 될 줄 알았는데, 실제 코드에서는 **응답을 믿지 않고 검증하는 부분**이 더 중요해 보임. Spring에서 요청 값을 `@Valid`로 검사했던 것처럼, AI 응답도 "외부에서 들어온 입력"으로 다뤄야 한다는 점이 새로웠음
+* 코사인 유사도가 "특징이 겹치는 정도"를 숫자 하나로 보여 준다는 게 직관적이었음. 영화 장르 4칸짜리 벡터가 실제로는 수백~수천 칸짜리 임베딩이 될 뿐이라고 생각하니 AI 검색이 어떻게 동작하는지 감이 옴
+* 챗봇이 대화를 "기억"하는 게 사실은 이전 대화를 매번 다시 보내는 것이라는 점이 의외였음. 그래서 이력을 잘라 내야 비용과 한도를 관리할 수 있다는 것도 이해됨
 * API 키를 `.env`로 빼고 `.gitignore`에 넣는 건 지난 Security·JPA 때 DB 비밀번호를 다룬 것과 같은 습관이라, 언어가 바뀌어도 보안 원칙은 같다는 걸 느낌

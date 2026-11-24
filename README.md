@@ -156,4 +156,4 @@
 
 | 날짜 | 파일명 | 핵심 학습 내용 |
 | :--- | :--- | :--- |
-| `26.11.23` | [261123-python-basics-for-llm.md](./12_ai-agent/261123-python-basics-for-llm.md) | Python 변수·f-string, 리스트(`append`·`insert`·`pop`)·딕셔너리(`get`·`KeyError`), 슬라이싱, 들여쓰기 블록·`if`/`elif`·`for in`, 리스트 컴프리헨션, 함수 타입 힌트·기본값·키워드 인자, `json.dumps`/`loads`·`ensure_ascii`, `try`/`except JSONDecodeError`, LLM 프롬프트 생성·응답 검증(`isinstance`·`raise ValueError`), `if __name__ == "__main__"`, `.env`·`load_dotenv`·OpenAI Chat Completions 호출 |
+| `26.11.23` | [261123-python-basics-for-llm.md](./12_ai-agent/261123-python-basics-for-llm.md) | Python 변수·f-string, 리스트(`append`·`insert`·`pop`)·딕셔너리(`get`·`KeyError`), 슬라이싱, 들여쓰기 블록·`if`/`elif`·`for in`, 리스트 컴프리헨션, 함수 타입 힌트·기본값·키워드 인자, `json.dumps`/`loads`·`ensure_ascii`, `try`/`except JSONDecodeError`, LLM 프롬프트 생성·응답 검증(`isinstance`·`raise ValueError`), `if __name__ == "__main__"`·`dict.items()`·예외 순서, NumPy 배열 연산·벡터·내적·코사인 유사도, OpenAI 대화 봇(`system`/`user`/`assistant`·이력 `[-10:]`·`finish_reason`·`temperature`·`with`·함수 인자·클로저), `.env`·`load_dotenv` |
